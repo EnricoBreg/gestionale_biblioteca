@@ -9,6 +9,8 @@
 
 # Ignore all environment files.
 /.env*
+# Tranne il file di esempio
+!/.env.example
 
 # Ignore all logfiles and tempfiles.
 /log/*
