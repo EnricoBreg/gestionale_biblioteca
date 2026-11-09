@@ -23,5 +23,8 @@ module GestionaleBiblioteca
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Per salvare lo schema del database in un file SQL invece che Ruby:
+    config.active_record.schema_format = :sql
   end
 end
