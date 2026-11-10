@@ -21,12 +21,24 @@
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
-
-    <%# CDN per la libreria CSS Pico.css %>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
   </head>
 
   <body>
-    <%= yield %>
+    <header>
+      <nav>
+        <ul>
+          <li><strong>Gestionale biblioteca</strong></li>
+        </ul>
+        <% if authenticated? %>
+          <ul>
+            <li><p><%= Current.user.email_address %></p></li>
+            <li><%= button_to "Esci", session_path, method: :delete %></li>
+          </ul>
+        <% end %>
+      </nav>
+    </header>
+    <main>
+      <%= yield %>
+    </main>
   </body>
 </html>
