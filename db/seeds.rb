@@ -7,4 +7,6 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-User.find_or_create_by!(email_address: ENV.fetch("ADMIN_EMAIL_ADDRESS"), password_digest: BCrypt::Password.create(ENV.fetch("ADMIN_PASSWORD")))
+User.find_or_create_by!(email_address: ENV.fetch("ADMIN_EMAIL_ADDRESS")) do |user|
+  user.password = ENV.fetch("ADMIN_PASSWORD") # la cifratura della password avviene quando viene assegnata all'attributo virtuale password
+end
