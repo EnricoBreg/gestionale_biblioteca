@@ -1,0 +1,60 @@
+it: 
+  activerecord:
+    models: 
+      book:
+        one: Libro
+        other: Libri
+      book_copy:
+        one: Copia libro
+        other: Copie libro
+      member:
+        one: Lettore
+        other: Lettori
+      loan:
+        one: Prestito
+        other: Prestiti
+    attributes:
+      book:
+        title: Titolo
+        isbn: ISBN
+        publication_year: Anno di pubblicazione
+        category: Categoria
+        author: Autore
+        book_copies: copie
+      book_copy:
+        book: Libro
+        book_id: Libro
+        inventory_code: Numero di inventario
+        location: Collocazione
+        loans: prestiti
+      member:
+        first_name: Nome
+        last_name: Cognome
+        tax_code: Codice fiscale
+        email: E-mail
+        phone: Telefono
+        active: Attivo
+        loans: prestiti
+      loan:
+        book_copy: Copia libro
+        book_copy_id: Copia libro
+        member: Lettore
+        member_id: Lettore
+        started_on: Data inizio
+        due_on: Scadenza
+        returned_on: Data restituzione
+  
+    errors:
+      models: 
+        loan:
+          attributes:
+            book_copy_id:
+              already_lent: è già in prestito
+            member:
+              inactive: non è attivo
+            due_on:
+              cannot_precede_started_on: non può precedere la data di inizio
+            returned_on:
+              cannot_precede_started_on: non può precedere la data di inizio
+        member:
+          has_ongoing_loans: "Il lettore non può essere disattivato: ha prestiti in corso"

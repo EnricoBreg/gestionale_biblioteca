@@ -14,6 +14,6 @@ class Member < ApplicationRecord
   private
 
   def no_ongoing_loans_when_deactivating
-    errors.add(:active, "ha prestiti in corso") if loans.ongoing.exists?
+    errors.add(:base, :has_ongoing_loans) if loans.ongoing.exists?
   end
 end

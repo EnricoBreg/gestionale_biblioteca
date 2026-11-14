@@ -21,10 +21,14 @@ module GestionaleBiblioteca
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
     #
-    # config.time_zone = "Central Time (US & Canada)"
+    config.time_zone = "Rome"
     # config.eager_load_paths << Rails.root.join("extras")
 
     # Per salvare lo schema del database in un file SQL invece che Ruby:
     config.active_record.schema_format = :sql
+
+    # Traduzioni e internazionalizzazione
+    config.i18n.default_locale = :it
+    config.i18n.available_locales = [ :it ]
   end
 end
