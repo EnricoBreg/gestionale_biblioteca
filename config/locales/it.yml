@@ -6,7 +6,7 @@ it:
         record_invalid: 'Validazione fallita: %{errors}'
         restrict_dependent_destroy:
           has_one: Il record non può essere cancellato perché esiste un %{record} dipendente
-          has_many: Impossibile eliminare: esistono %{record} collegati
+          has_many: 'Impossibile eliminare: esistono %{record} collegati'
   date:
     abbr_day_names:
     - dom
