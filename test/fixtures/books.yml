@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: "Harry Potter - L'ordine della Fenice"
+  isbn: "9781234567897"
+  publication_year: 1998
+  category: "Fantasy"
+  author: "J.K. Rowling"
+
+two:
+  title: "La città delle ossa"
+  isbn: "9781234567800"
+  publication_year: 2010
+  category: "Thriller"
+  author: "Michael Connelly"

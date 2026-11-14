@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  book_copy: one
+  member: one
+  started_on: 2026-11-14
+  due_on: 2026-11-30
+  returned_on: 2026-11-25
+
+two:
+  book_copy: two
+  member: two
+  started_on: 2026-11-14
+  due_on: 2026-11-30
+  returned_on: 

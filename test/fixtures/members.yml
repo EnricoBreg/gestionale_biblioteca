@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  first_name: "John"
+  last_name: "Doe"
+  tax_code: "JMWMFZ03R71L367J"
+  email: "john.doe@email.com"
+  phone: "+39 3566049565"
+  active: true
+
+two:
+  first_name: "Sarah"
+  last_name: "Smith"
+  tax_code: "PCLXNC26M45D095W"
+  email: "s.smith@email.com"
+  phone: "+39 3524849665"
+  active: true
