@@ -1,0 +1,30 @@
+<% content_for :title, "Libri" %>
+
+<h1>Libri</h1>
+
+<%= link_to "Nuovo libro", new_book_path, role: "button" %>
+
+<div id="books">
+  <table class="striped">
+    <thead>
+      <tr>
+        <th scope="col"><%= Book.human_attribute_name(:isbn) %></th>
+        <th scope="col"><%= Book.human_attribute_name(:title) %></th>
+        <th scope="col"><%= Book.human_attribute_name(:author) %></th>
+        <th scope="col"><%= Book.human_attribute_name(:publication_year) %></th>
+        <th scope="col">Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @books.each do |book| %>
+        <tr>
+          <th scope="row"><%= book.isbn %></th>
+          <td><%= book.title %></td>
+          <td><%= book.author %></td>
+          <td><%= book.publication_year %></td>
+          <td><%= link_to "Vedi libro", book %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

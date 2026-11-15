@@ -1,0 +1,17 @@
+<article id="<%= dom_id book %>">
+  <header>
+    <hgroup>
+      <h3><%= book.title %></h3>
+      <p><%= book.author %> - <%= book.publication_year %></p>
+    </hgroup>
+  </header>
+  
+  <dl>
+    <dt><strong><%= Book.human_attribute_name(:isbn) %>:</strong></dt>
+    <dd><%= book.isbn %></dd>
+    
+    <dt><strong><%= Book.human_attribute_name(:category) %>:</strong></dt>
+    <dd><%= book.category %></dd>
+  </dl>
+
+</article>
