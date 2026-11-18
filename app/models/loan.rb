@@ -2,7 +2,9 @@ class Loan < ApplicationRecord
   belongs_to :book_copy
   belongs_to :member
 
-  scope :ongoing, -> { where(returned_on: nil) }
+  scope :closed, -> { where.not(returned_on: nil) }
+  scope :overdue, -> { where(returned_on: nil).where(due_on: ...Date.current) }
+  scope :ongoing, -> { where(returned_on: nil).where(due_on: Date.current..) }
 
   validates :started_on, :due_on, presence: true
   validates :book_copy_id, uniqueness: {
@@ -12,6 +14,25 @@ class Loan < ApplicationRecord
   validate :due_on_not_before_started_on
   validate :returned_on_not_before_started_on
   validate :member_must_be_active, on: :create
+
+  STATUSES = %i[ ongoing closed overdue ].freeze
+
+  def status
+    return :closed if returned_on.present?
+    due_on < Date.current ? :overdue : :ongoing
+  end
+
+  STATUSES.each do |s|
+    define_method(:"#{s}?") { status == s }
+  end
+
+  def human_status
+    self.class.human_status(status)
+  end
+
+  def self.human_status(value)
+    I18n.t(value, scope: "activerecord.attributes.loan.statuses")
+  end
 
   private
 
