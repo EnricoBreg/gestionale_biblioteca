@@ -1,10 +1,801 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+/* ==========================================================================
+   biblioteca.css — foglio di stile del Gestionale Biblioteca
+   Autonomo: sostituisce Pico.css (non caricare entrambi).
+   Rails: salvalo in app/assets/stylesheets/ e includilo nel layout con
+   <%= stylesheet_link_tag "biblioteca" %>
+
+   Indice
+   1. Variabili (token di design)
+   2. Base (reset, tipografia, link)
+   3. Layout (container, header, navigazione)
+   4. Pulsanti
+   5. Form
+   6. Tabelle
+   7. Componenti (card, stat, badge, alert, breadcrumb, paginazione, ...)
+   8. Utilità (flexbox, grid, spaziature, testo)
+   ========================================================================== */
+
+
+/* 1. Variabili ============================================================ */
+
+:root {
+  /* Colori */
+  --color-bg: #ffffff;
+  --color-bg-subtle: #f6f7f9;
+  --color-text: #373c44;
+  --color-heading: #2d3138;
+  --color-muted: #646b79;
+  --color-border: #e7eaf0;
+  --color-border-strong: #cfd5e2;
+
+  --color-primary: #0172ad;
+  --color-primary-hover: #015887;
+  --color-primary-soft: #e3f1f8;
+  --color-on-primary: #ffffff;
+
+  --color-danger: #b3261e;
+  --color-danger-hover: #8c1d18;
+  --color-danger-soft: #fdecea;
+
+  --color-neutral: #4d5360;
+  --color-neutral-soft: #f0f1f4;
+
+  /* Tipografia */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Misure */
+  --radius: 4px;
+  --radius-lg: 8px;
+  --control-height: 48px;
+  --control-height-sm: 44px;
+  --container: 1130px;
+  --container-narrow: 760px;
+
+  /* Scala delle spaziature */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 40px;
+  --space-8: 64px;
+}
+
+
+/* 2. Base ================================================================= */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+h1, h2, h3 {
+  margin: 0;
+  color: var(--color-heading);
+  line-height: 1.2;
+}
+h1 { font-size: 32px; }
+h2 { font-size: 22px; }
+h3 { font-size: 18px; }
+
+p { margin: 0; }
+
+a {
+  color: var(--color-primary);
+}
+a:hover {
+  color: var(--color-primary-hover);
+}
+
+small {
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+
+/* 3. Layout =============================================================== */
+
+/* Contenitore centrato: <main class="container page"> */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: var(--space-5);
+}
+.container.narrow {
+  max-width: var(--container-narrow);
+}
+
+/* Spaziatura verticale standard della pagina: i figli diretti vengono
+   impilati con distanza uniforme. */
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  padding-block: var(--space-7) var(--space-8);
+}
+
+/* Barra superiore
+   <header class="site-header">
+     <nav class="container navbar">
+       <a class="navbar-brand" href="/">Biblioteca</a>
+       <ul class="navbar-links"><li><a aria-current="page">...</a></li></ul>
+       <div class="navbar-user">...</div>
+     </nav>
+   </header> */
+.site-header {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.navbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0 var(--space-5);
+  min-height: 64px;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--color-heading);
+  text-decoration: none;
+}
+.navbar-brand:hover {
+  color: var(--color-heading);
+}
+
+.navbar-links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 var(--space-5);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.navbar-links a {
+  display: flex;
+  align-items: center;
+  min-height: 64px;
+  color: var(--color-muted);
+  text-decoration: none;
+}
+.navbar-links a:hover {
+  color: var(--color-heading);
+}
+.navbar-links a[aria-current="page"] {
+  color: var(--color-heading);
+  font-weight: 600;
+  box-shadow: inset 0 -2px 0 var(--color-primary);
+}
+
+.navbar-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  font-size: 15px;
+  color: var(--color-muted);
+}
+
+/* Intestazione di pagina: titolo a sinistra, azioni a destra
+   <div class="page-header"><h1>Libri</h1><a role="button">Nuovo libro</a></div> */
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+.page-header .subtitle {
+  margin-top: var(--space-1);
+  color: var(--color-muted);
+}
+
+
+/* 4. Pulsanti ============================================================= */
+
+/* Primario di default. Valgono per <button>, <input type="submit">
+   (f.submit di Rails) e per i link con role="button". */
+button,
+input[type="submit"],
+[role="button"] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--control-height);
+  padding: 0 20px;
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font: inherit;
+  font-weight: 500;
+  white-space: nowrap;
+  text-decoration: none;
+  cursor: pointer;
+}
+button:hover,
+input[type="submit"]:hover,
+[role="button"]:hover {
+  background: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+  color: var(--color-on-primary);
+}
+
+/* Variante con solo bordo: class="outline" */
+.outline {
+  background: var(--color-bg);
+  color: var(--color-primary);
+}
+.outline:hover {
+  background: var(--color-primary-soft);
+  border-color: var(--color-primary-hover);
+  color: var(--color-primary-hover);
+}
+
+/* Variante neutra (Annulla, Precedente): class="secondary" */
+.secondary {
+  background: var(--color-bg);
+  border-color: var(--color-border-strong);
+  color: var(--color-neutral);
+}
+.secondary:hover {
+  background: var(--color-neutral-soft);
+  border-color: var(--color-border-strong);
+  color: var(--color-heading);
+}
+
+/* Variante distruttiva (Elimina): class="danger" */
+.danger {
+  background: var(--color-bg);
+  border-color: var(--color-danger);
+  color: var(--color-danger);
+}
+.danger:hover {
+  background: var(--color-danger-soft);
+  border-color: var(--color-danger-hover);
+  color: var(--color-danger-hover);
+}
+
+/* Misura ridotta per le righe di tabella: class="small" */
+.small {
+  height: var(--control-height-sm);
+  padding: 0 var(--space-4);
+}
+
+button:disabled,
+input[type="submit"]:disabled,
+[role="button"][aria-disabled="true"] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* button_to di Rails genera un <form>: lo teniamo in linea */
+form.button_to {
+  display: inline-block;
+  margin: 0;
+}
+
+
+/* 5. Form ================================================================= */
+
+form {
+  margin: 0;
+}
+
+/* L'etichetta contiene il campo: <label>Titolo <input ...></label> */
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 15px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  height: var(--control-height);
+  padding: 0 14px;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  color: var(--color-heading);
+  font: inherit;
+}
+textarea {
+  height: auto;
+  min-height: 120px;
+  padding: 12px 14px;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-muted);
+}
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* I pulsanti di invio non devono ereditare la larghezza dei campi */
+input[type="submit"] {
+  width: auto;
+}
+
+/* Campo non valido: <input aria-invalid="true"> + <small class="error"> */
+[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+[aria-invalid="true"]:focus {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px var(--color-danger-soft);
+}
+small.error {
+  color: var(--color-danger);
+}
+
+/* Il wrapper che Rails aggiunge ai campi con errori non deve rompere
+   il layout; il campo al suo interno prende il bordo rosso. */
+.field_with_errors {
+  display: contents;
+}
+.field_with_errors input,
+.field_with_errors select,
+.field_with_errors textarea {
+  border-color: var(--color-danger);
+}
+
+/* Checkbox e interruttore
+   <label class="check"><input type="checkbox" role="switch"> Membro attivo</label> */
+label.check {
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 44px;
+}
+input[type="checkbox"],
+input[type="radio"] {
+  flex: none;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  margin: 0;
+  accent-color: var(--color-primary);
+}
+input[type="checkbox"][role="switch"] {
+  appearance: none;
+  -webkit-appearance: none;
+  position: relative;
+  width: 44px;
+  height: 24px;
+  border: none;
+  border-radius: 999px;
+  background: var(--color-border-strong);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+input[type="checkbox"][role="switch"]::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  transition: transform 0.15s;
+}
+input[type="checkbox"][role="switch"]:checked {
+  background: var(--color-primary);
+}
+input[type="checkbox"][role="switch"]:checked::before {
+  transform: translateX(20px);
+}
+
+/* Form impilato dentro una card: <form class="card form-stack"> */
+.form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Riga di campi affiancati che va a capo su schermi stretti
+   <div class="form-row"><label>Nome ...</label><label>Cognome ...</label></div> */
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+}
+
+/* Pulsanti in fondo al form, allineati a destra */
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+/* Barra di ricerca e filtri sopra le tabelle
+   <form class="filters" role="search">
+     <label class="grow-3">Cerca <input type="search"></label>
+     <label class="grow-1">Stato <select>...</select></label>
+     <button class="outline">Filtra</button>
+   </form> */
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+.filters .grow-3 { flex: 3 1 280px; }
+.filters .grow-1 { flex: 1 1 180px; }
+
+
+/* 6. Tabelle ============================================================== */
+
+/* Contenitore che permette lo scorrimento orizzontale su mobile */
+.table-wrap {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+th {
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--color-border);
+  color: var(--color-heading);
+  font-weight: 600;
+  text-align: left;
+  white-space: nowrap;
+}
+td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Prima colonna in evidenza: <td class="cell-main"> */
+.cell-main {
+  color: var(--color-heading);
+  font-weight: 500;
+}
+
+/* Colonna delle azioni, allineata a destra: <td class="cell-actions"> */
+.cell-actions {
+  text-align: right;
+  white-space: nowrap;
+}
+.cell-actions > * + * {
+  margin-left: var(--space-4);
+}
+
+/* Link dentro le celle con area cliccabile comoda */
+td a:not([role="button"]) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+}
+
+
+/* 7. Componenti =========================================================== */
+
+/* Card: riquadro con bordo (form, KPI, dati del libro) */
+.card {
+  padding: 28px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg);
+}
+
+/* Pannello grigio (riepilogo membro, "Aggiungi una copia") */
+.panel {
+  padding: var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--color-bg-subtle);
+}
+
+/* Card KPI della dashboard
+   <article class="stat">
+     <span class="stat-label">Prestiti in corso</span>
+     <span class="stat-value">18</span>
+     <a href="...">Vedi tutti</a>
+   </article> */
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+}
+.stat-label {
+  color: var(--color-muted);
+}
+.stat-value {
+  color: var(--color-heading);
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.stat-value.danger-text {
+  color: var(--color-danger);
+}
+
+/* Badge di stato
+   <span class="badge info">In corso</span>
+   <span class="badge late">Scaduto</span>
+   <span class="badge muted">Restituito</span> */
+.badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--color-neutral-soft);
+  color: var(--color-neutral);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge.info {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+}
+.badge.late {
+  background: var(--color-danger);
+  color: #ffffff;
+}
+
+/* Messaggi flash e riepilogo errori
+   <div class="alert error" role="alert">...</div>
+   <div class="alert notice" role="status">...</div> */
+.alert {
+  padding: 14px var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius);
+  background: var(--color-bg-subtle);
+  font-size: 15px;
+}
+.alert.error {
+  border-color: var(--color-danger);
+  background: var(--color-danger-soft);
+  color: var(--color-danger-hover);
+}
+.alert.notice {
+  border-color: var(--color-primary);
+  background: var(--color-primary-soft);
+  color: var(--color-primary-hover);
+}
+.alert ul {
+  margin: var(--space-2) 0 0;
+  padding-left: 20px;
+}
+
+/* Breadcrumb
+   <nav class="breadcrumb" aria-label="Percorso">
+     <a href="/books">Libri</a><span>I promessi sposi</span>
+   </nav> */
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+  color: var(--color-muted);
+  font-size: 14px;
+}
+.breadcrumb > * + *::before {
+  content: "/";
+  margin-right: var(--space-2);
+  color: var(--color-muted);
+}
+
+/* Riga di paginazione sotto le tabelle
+   <div class="pagination">
+     <span>1–8 di 124 prestiti</span>
+     <nav aria-label="Paginazione">
+       <a role="button" class="secondary small">Precedente</a>
+       <a role="button" class="outline small">Successiva</a>
+     </nav>
+   </div> */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  color: var(--color-muted);
+  font-size: 15px;
+}
+.pagination nav {
+  display: flex;
+  gap: var(--space-2);
+}
+
+/* Elenco di attributi (pagina di dettaglio)
+   <dl class="details card">
+     <div><dt>ISBN</dt><dd>978-...</dd></div>
+   </dl> */
+dl.details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 20px;
+  margin: 0;
+}
+dl.details dt {
+  color: var(--color-muted);
+  font-size: 14px;
+}
+dl.details dd {
+  margin: 2px 0 0;
+  color: var(--color-heading);
+  font-weight: 500;
+}
+
+/* Elenco compatto etichetta/valore su due colonne (riepilogo laterale) */
+dl.summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-2) var(--space-4);
+  margin: 0;
+  font-size: 15px;
+}
+dl.summary dt { color: var(--color-muted); }
+dl.summary dd { margin: 0; color: var(--color-heading); overflow-wrap: anywhere; }
+
+/* Due colonne contenuto + pannello laterale che si impilano su mobile
+   <div class="with-aside"><form class="card">...</form><aside class="panel">...</aside></div> */
+.with-aside {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: var(--space-6);
+}
+.with-aside > :first-child {
+  flex: 999 1 480px;
+  min-width: 0;
+}
+.with-aside > aside {
+  flex: 1 1 280px;
+}
+
+/* Pagina di login: <main class="login"><article class="card login-card">... */
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-5);
+  min-height: 100vh;
+  padding: 48px var(--space-5);
+  background: var(--color-bg-subtle);
+}
+.login-card {
+  width: 100%;
+  max-width: 420px;
+  padding: var(--space-6);
+}
+.login-card [role="button"],
+.login-card button,
+.login-card input[type="submit"] {
+  width: 100%;
+}
+
+
+/* 8. Utilità ============================================================== */
+
+/* Flexbox */
+.flex          { display: flex; }
+.inline-flex   { display: inline-flex; }
+.flex-col      { flex-direction: column; }
+.flex-wrap     { flex-wrap: wrap; }
+.items-start   { align-items: flex-start; }
+.items-center  { align-items: center; }
+.items-end     { align-items: flex-end; }
+.items-baseline { align-items: baseline; }
+.justify-start   { justify-content: flex-start; }
+.justify-center  { justify-content: center; }
+.justify-end     { justify-content: flex-end; }
+.justify-between { justify-content: space-between; }
+.grow     { flex: 1 1 0; min-width: 0; }
+.shrink-0 { flex-shrink: 0; }
+
+/* Grid */
+.grid   { display: grid; gap: var(--space-4); }
+.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+/* Colonne automatiche: tante quante ce ne stanno, minimo 220px l'una
+   (usata per le card KPI della dashboard) */
+.cols-auto { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.col-span-2 { grid-column: span 2; }
+.col-full   { grid-column: 1 / -1; }
+
+/* Distanza tra figli di .flex e .grid */
+.gap-0 { gap: 0; }
+.gap-1 { gap: var(--space-1); }
+.gap-2 { gap: var(--space-2); }
+.gap-3 { gap: var(--space-3); }
+.gap-4 { gap: var(--space-4); }
+.gap-5 { gap: var(--space-5); }
+.gap-6 { gap: var(--space-6); }
+
+/* Margini verticali */
+.mt-0 { margin-top: 0; }
+.mt-1 { margin-top: var(--space-1); }
+.mt-2 { margin-top: var(--space-2); }
+.mt-4 { margin-top: var(--space-4); }
+.mt-5 { margin-top: var(--space-5); }
+.mt-6 { margin-top: var(--space-6); }
+.mb-0 { margin-bottom: 0; }
+.mb-2 { margin-bottom: var(--space-2); }
+.mb-4 { margin-bottom: var(--space-4); }
+.mb-5 { margin-bottom: var(--space-5); }
+.mb-6 { margin-bottom: var(--space-6); }
+
+/* Testo */
+.text-muted  { color: var(--color-muted); }
+.text-danger { color: var(--color-danger); }
+.text-right  { text-align: right; }
+.text-center { text-align: center; }
+.text-sm     { font-size: 14px; }
+.text-lg     { font-size: 18px; }
+.font-medium { font-weight: 500; }
+.font-bold   { font-weight: 700; }
+.nowrap      { white-space: nowrap; }
+.mono        { font-family: var(--font-mono); font-size: 14px; white-space: nowrap; }
+
+/* Varie */
+.w-full { width: 100%; }
+.hidden { display: none; }
+
+/* Visibile solo ai lettori di schermo (es. intestazione della colonna Azioni) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Schermi stretti: le griglie a colonne fisse diventano a colonna singola */
+@media (max-width: 640px) {
+  h1 { font-size: 26px; }
+  .cols-2,
+  .cols-3,
+  .cols-4 { grid-template-columns: minmax(0, 1fr); }
+  .col-span-2 { grid-column: auto; }
+  .page { padding-block: var(--space-5) var(--space-7); }
+}
