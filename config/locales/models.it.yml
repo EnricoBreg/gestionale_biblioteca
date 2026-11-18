@@ -43,6 +43,13 @@ it:
         started_on: Data inizio
         due_on: Scadenza
         returned_on: Data restituzione
+        status: Stato
+        statuses:
+          ongoing: In corso
+          closed: Chiuso
+          overdue: In ritardo
+
+
   
     errors:
       models: 
