@@ -24,24 +24,36 @@
   </head>
 
   <body>
-    <header>
-      <nav>
-        <ul>
-          <li><strong>Gestionale biblioteca</strong></li>
-        </ul>
-        <% if authenticated? %>
-          <ul>
-            <li><%= Current.user.email_address %></li>
-            <li><%= button_to "Esci", session_path, method: :delete %></li>
+    <% if authenticated? %>
+      <header class="site-header">
+        <nav class="container navbar" aria-label="Principale">
+          <a class="navbar-brand" href="index.html">
+            <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"></path><path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path></svg>
+            Biblioteca
+          </a>
+          <ul class="navbar-links">
+            <li><a href="index.html">Dashboard</a></li>
+            <li><a href="prestiti.html">Prestiti</a></li>
+            <li><%= link_to "Libri", books_path, "aria-current": "page" %></li>
+            <li><a href="membri.html">Membri</a></li>
+            <li><a href="#">Utenti</a></li>
           </ul>
-        <% end %>
-      </nav>
-    </header>
-    <main>
-      <%= tag.div(flash[:alert], style: "color:red") if flash[:alert] %>
-      <%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
+          <div class="navbar-user">
+            <span><%= Current.user.email_address %></span>
+            <%= button_to "Esci", session_path, method: :delete %>
+          </div>
+        </nav>
+      </header>
 
+      <main class="container page">
+        <div>
+          <%= tag.div(flash[:alert], class: "alert error", role: "alert") if flash[:alert] %>
+          <%= tag.div(flash[:notice], style: "color:green") if flash[:notice] %>
+        </div>
+        <%= yield %>
+      </main>
+    <% else %>
       <%= yield %>
-    </main>
+    <% end %>
   </body>
 </html>

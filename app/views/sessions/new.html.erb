@@ -1,6 +1,42 @@
-<%= form_with url: session_path do |form| %>
-  <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "Inserisci il tuo indirizzo email", value: params[:email_address] %><br>
-  <%= form.password_field :password, required: true, autocomplete: "current-password", placeholder: "Inserisci la tua password", maxlength: 72 %><br>
-  <%= form.submit "Accedi" %>
-<% end %>
-<br>
+<div class="login">
+  <%# Logo: icona + nome, riusa lo stile del brand della navbar %>
+  <div class="navbar-brand">
+    <svg aria-hidden="true" width="26" height="26" viewBox="0 0 24 24" fill="none"
+         stroke="var(--color-primary)" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+      <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14z"></path>
+      <path d="M4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"></path>
+    </svg>
+    Biblioteca
+  </div>
+
+  <article class="card login-card flex flex-col gap-5">
+    <div>
+      <h1>Accedi</h1>
+      <p class="text-muted text-sm mt-1">Area riservata agli addetti della biblioteca.</p>
+    </div>
+
+    <%# Credenziali errate: messaggio impostato dal controller con flash.now[:alert] %>
+    <% if flash[:alert] %>
+      <div class="alert error" role="alert"><%= flash[:alert] %></div>
+    <% end %>
+
+    <%= form_with url: session_path, class: "form-stack" do |f| %>
+      <label>
+        Email
+        <%= f.email_field :email_address, required: true, autofocus: true,
+              autocomplete: "username", placeholder: "nome@biblioteca.example", values: params[:email_address] %>
+      </label>
+
+      <label>
+        Password
+        <%= f.password_field :password, required: true,
+              autocomplete: "current-password", placeholder: "La tua password", maxlength: 72 %>
+      </label>
+
+      <%= f.submit "Accedi" %>
+    <% end %>
+  </article>
+
+  <p class="text-muted text-sm">Password dimenticata? Contatta l'amministratore.</p>
+</div>
