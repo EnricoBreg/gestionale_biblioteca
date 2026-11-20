@@ -2,7 +2,9 @@
 
 services:
   db:
-    image: docker.io/library/postgres:17
+    # Versione di postgresql fissata alla 17.9 per evitare che pg_dump crei dei vincoli indesiderati a database. 
+    # Ricordarsi di scaricare la versione corretta del client: postgresql17
+    image: docker.io/library/postgres:17.9
     restart: always
     environment:
       POSTGRES_USER: ${DB_USERNAME}
