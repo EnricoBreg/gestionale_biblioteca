@@ -3,7 +3,7 @@ class BooksController < ApplicationController
 
   # GET /books
   def index
-    @books = Book.search(params).order(:title)
+    @books = Book.with_copies_count.search(params).order(:title)
   end
 
   # GET /books/1
