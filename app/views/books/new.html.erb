@@ -1,11 +1,13 @@
 <% content_for :title, "Nuovo libro" %>
 
-<h1>Aggiungi nuovo libro</h1>
+<div class="container narrow page">
+  <div>
+    <nav class="breadcrumb" aria-label="Percorso">
+      <%= link_to "Libri", books_url %>
+      <span>Nuovo</span>
+    </nav>
+    <h1>Nuovo libro</h1>
+  </div>
 
-<%= render "form", book: @book %>
-
-<br>
-
-<div>
-  <%= link_to "Torna ai libri", books_path %>
+  <%= render "form", book: @book %>
 </div>

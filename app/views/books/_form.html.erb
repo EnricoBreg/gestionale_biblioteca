@@ -1,42 +1,37 @@
-<%= form_with(model: book) do |form| %>
-  <% if book.errors.any? %>
-    <div>
-      <h3>Il libro non è stato salvato (<%= pluralize(book.errors.count, "errore", plural: "errori") %>):</h3>
+<%= form_with model: book, class: "card form-stack" do |form| %>
+  <label>
+    <%= Book.human_attribute_name(:title) %>
+    <%= form.text_field :title, placeholder: "Es. Il barone rampante"%>
+  </label>
 
-      <ul>
-        <% book.errors.each do |error| %>
-          <li><%= error.full_message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <label>
+    <%= Book.human_attribute_name(:author) %>
+    <%= form.text_field :author, placeholder: "Es. Italo Calvino" %>
+  </label>
 
-  <div>
-    <%= form.label :title %>
-    <%= form.text_field :title %>
+  <div class="form-row">
+    <label>
+      <%= Book.human_attribute_name(:publication_year) %>
+      <%= form.number_field :publication_year,
+                            in: 1..Date.current.year, step: 1,
+                            placeholder: 1957 %> 
+    </label>
+    <label>
+      <%= Book.human_attribute_name(:isbn) %>
+      <%= form.text_field :isbn, placeholder: "978-88-000-0000-0" %>
+      <small>13 cifre, univoco nel catalogo.</small>
+    </label>
   </div>
 
-  <div>
-    <%= form.label :author %>
-    <%= form.text_field :author %>
-  </div>
+  <label>
+    <%= Book.human_attribute_name(:category) %>
+    <%= form.text_field :category, placeholder: "Romazo storico" %>
+  </label>
 
-  <div>
-    <%= form.label :isbn %>
-    <%= form.text_field :isbn %>
-  </div>
+  <p class="alert text-sm">Dopo il salvataggio potrai aggiungere le copie fisiche dalla pagina del libro.</p>
 
-  <div>
-    <%= form.label :publication_year %>
-    <%= form.number_field :publication_year %>
-  </div>
-
-  <div>
-    <%= form.label :category %>
-    <%= form.text_field :category %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div class="form-actions">
+    <%= link_to "Annulla", books_url, class: "secondary", role: "button" %>
+    <%= form.submit "Salva libro" %>
   </div>
 <% end %>

@@ -1,8 +1,1 @@
 <%= render @book %>
-
-<div>
-  <%= link_to "Modifica questo libro", edit_book_path(@book) %> |
-  <%= link_to "Torna ai libri", books_path %>
-
-  <%= button_to "Cancella questo libro", @book, method: :delete, data: { turbo_confirm: "Sei sicuro di voler cancellare il libro?" } %>
-</div>

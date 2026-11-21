@@ -1,17 +1,91 @@
-<article id="<%= dom_id book %>">
-  <header>
-    <hgroup>
-      <h3><%= book.title %></h3>
-      <p><%= book.author %> - <%= book.publication_year %></p>
-    </hgroup>
-  </header>
+<div id="<%= dom_id book %>" class="container page gap-6">
   
-  <dl>
-    <dt><strong><%= Book.human_attribute_name(:isbn) %>:</strong></dt>
-    <dd><%= book.isbn %></dd>
-    
-    <dt><strong><%= Book.human_attribute_name(:category) %>:</strong></dt>
-    <dd><%= book.category %></dd>
+  <div class="page-header items-end">
+    <div>
+      <nav class="breadcrumb" aria-label="Percorso">
+        <%= link_to "Libri", books_url %>
+        <span><%= book.title %></span>
+      </nav>
+      <h1><%= book.title %></h1>
+      <p class="subtitle text-lg"><%= book.author %></p>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <%= button_to "Elimina", book, class: "danger", method: :delete, data: { turbo_confirm: "Sei sicuro di voler cancellare il libro?" } %>
+      <%= link_to "Modifica", edit_book_path(book), role: "button", class: "outline" %>
+    </div>
+  </div>
+
+  <dl class="details card">
+    <div>
+      <dt><%= Book.human_attribute_name(:publication_year) %></dt>
+      <dd><%= book.publication_year %></dd>
+    </div>
+    <div>
+      <dt><%= Book.human_attribute_name(:isbn) %></dt>
+      <dd class="mono"><%= book.isbn %></dd>
+    </div>
+    <div>
+      <dt><%= Book.human_attribute_name(:category) %></dt>
+      <dd><%= book.category %></dd>
+    </div>
+    <div>
+      <dt>Copie disponibili</dt>
+      <dd><%= book.book_copies.size %> su <%= book.book_copies.size %></dd>
+    </div>
   </dl>
 
-</article>
+  <section class="flex flex-col gap-3">
+    <h2>Copie</h2>
+    
+    <div class="table-wrap">
+      <% if book.book_copies.empty? %>
+        <p>Nessuna copia registrata per questo libro.</p>
+      <% else %> 
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Codice inventario</th>
+              <th scope="col">Collocazione</th>
+              <th scope="col">Stato</th>
+              <th scope="col">Prestito attuale</th>
+              <th scope="col"><span class="sr-only">Azioni</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            <% book.book_copies.each do |book_copy| %>
+              <tr>
+                <td class="mono"><%= book_copy.inventory_code %></td>
+                <td><%= book_copy.location %></td>
+                <td><span class="badge info">Disponibile</span></td>
+                <td>Chiara Vitali - scade il 2/12/2026</td>
+                <td class="cell-actions">
+                  <a href="#">Modifica</a>
+                  <a class="text-danger" href="#">Elimina</a>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="panel flex flex-col gap-4">
+    <h3>Aggiungi una copia</h3>
+
+    <form class="filters">
+      <label class="grow-1">
+        <%= BookCopy.human_attribute_name(:inventory_code)  %>
+        <input type="text" name="book_copy[inventory_code]" placeholder="INV-0001-D">
+      </label>
+      <label class="grow-3">
+        <%= BookCopy.human_attribute_name(:location)  %>
+        <input type="text" name="book_copy[location]" placeholder="Sala A · Scaffale 1">
+      </label>
+      <button type="submit">Aggiungi copia</button>
+    </form>
+  </section>
+
+</div>
+

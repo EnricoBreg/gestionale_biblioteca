@@ -10,11 +10,26 @@
     <%= Book.human_attribute_name(:title) %>
     <%= form.search_field :title, value: params[:title], placeholder: Book.human_attribute_name(:title) %>
   </label>
+
+  <label class="grow-1">
+    <%= Book.human_attribute_name(:author) %>
+    <%= form.search_field :author, value: params[:author], placeholder: Book.human_attribute_name(:author) %>
+  </label>
+
+  <label class="grow-1">
+    <%= Book.human_attribute_name(:isbn) %>
+    <%= form.search_field :isbn, value: params[:isbn], placeholder: Book.human_attribute_name(:isbn) %>
+  </label>
+
   <label class="grow-1">
     <%= Book.human_attribute_name(:category) %>
     <%= form.select :category, Book.categories, { include_blank: "Tutte le categorie", selected: params[:category] } %>
   </label>
-  <%= form.button "Filtra", class: "outline" %>
+  
+  <div class="flex gap-2">
+    <%= form.button "Filtra", class: "outline", type: :submit %>
+    <%= link_to "Azzera", books_path, class: "secondary", role: :button %>
+  </div>
 <% end %>
 
 <div id="books" class="table-wrap">
@@ -36,14 +51,14 @@
       <tbody>
         <% @books.each do |book| %>
           <tr>
-            <td><a class="font-medium"><%= book.title %></a></td>
+            <td><%= link_to book.title, book_path(book), class: "font-medium" %></td>
             <td><%= book.author %></td>
             <td><%= book.publication_year %></td>
             <td class="mono"><%= book.isbn %></td>
             <td><%= book.category %></td>
-            <td class="nowrap"><%= book.book_copies.size %></td>
+            <td class="nowrap"><strong><%= book.copies_count %></strong> su <%= book.copies_count %></td>
             <td class="cell-actions"><%= link_to "Vedi libro", book %></td>
-          </td>
+          </tr>
         <% end %>
       </tbody>
     </table>
