@@ -13,3 +13,10 @@ two:
   publication_year: 2010
   category: "Thriller"
   author: "Michael Connelly"
+
+no_copy_book:
+  title: "Libertà"
+  isbn: "9781234567802"
+  publication_year: 2026
+  category: "Attualità"
+  author: "Giuseppe Cruciani"

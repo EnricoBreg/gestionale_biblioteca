@@ -3,13 +3,13 @@
 one:
   book_copy: one
   member: one
-  started_on: 2026-11-14
-  due_on: 2026-11-30
-  returned_on: 2026-11-25
+  started_on: <%= Date.current - 15 %>
+  due_on: <%= Date.current + 30 %>
+  returned_on: <%= Date.current - 1 %>
 
 two:
   book_copy: two
   member: two
-  started_on: 2026-11-14
-  due_on: 2026-11-30
+  started_on: <%= Date.current %>
+  due_on: <%= Date.current + 30 %>
   returned_on: 
