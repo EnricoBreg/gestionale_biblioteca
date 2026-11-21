@@ -88,4 +88,40 @@ class BooksControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :unprocessable_content
   end
+
+  test "la ricerca mostra solo i risultati e ricorda il campo" do
+    get books_url, params: { title: "harry" }
+    assert_response :success
+    assert_select "tbody tr", 1
+    assert_select "input[name=title][value=?]", "harry"
+  end
+
+  test "ricerca senza risultati" do
+    get books_url, params: { title: "xxxxxxx" }
+    assert_select "table", 0
+    assert_select "p", "Nessun libro trovato."
+  end
+
+  test "ricerca di un libro senza copie" do
+    get books_url, params: { isbn: "9781234567802" }
+    assert_response :success
+    assert_select "tbody tr", 1
+  end
+
+  test "Azzera toglie i filtri e svuota i campi" do
+    # Si parte con una ricerca filtrata
+    get books_url, params: { title: "Harry" }
+    assert_select "tbody tr", 1
+
+    # Verifico che il link esista e punta all'elenco senza parametri
+    assert_select "a[href=?]", books_path, text: "Azzera"
+
+    # Seguo il link
+    link = css_select("a").find { |a| a.text == "Azzera" }
+    get link["href"]
+
+    # Elenco completo, campo di ricerca precedente deve essere vuoto
+    assert_select "tbody tr", Book.count
+    assert_select "input[name=title][value]", 0
+  end
 end
