@@ -9,11 +9,11 @@ class Member < ApplicationRecord
   validates :tax_code, presence: true, uniqueness: true, length: { is: 16 }
   validates :email, allow_blank: true, uniqueness: true, format: { with: URI::MailTo::EMAIL_REGEXP }
   validates :active, inclusion: { in: [ true, false ] }
-  validate :no_ongoing_loans_when_deactivating, if: -> { will_save_change_to_active?(to: false) }
+  validate :no_open_loans_when_deactivating, if: -> { will_save_change_to_active?(to: false) }
 
   private
 
-  def no_ongoing_loans_when_deactivating
-    errors.add(:base, :has_ongoing_loans) if loans.ongoing.exists?
+  def no_open_loans_when_deactivating
+    errors.add(:base, :has_open_loans) if loans.open.exists?
   end
 end

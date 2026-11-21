@@ -64,4 +64,4 @@ it:
             returned_on:
               cannot_precede_started_on: non può precedere la data di inizio
         member:
-          has_ongoing_loans: "Il lettore non può essere disattivato: ha prestiti in corso"
+          has_open_loans: "Il lettore non può essere disattivato: ha prestiti in corso"

@@ -2,13 +2,14 @@ class Loan < ApplicationRecord
   belongs_to :book_copy
   belongs_to :member
 
+  scope :open, -> { where(returned_on: nil) }
   scope :closed, -> { where.not(returned_on: nil) }
-  scope :overdue, -> { where(returned_on: nil).where(due_on: ...Date.current) }
-  scope :ongoing, -> { where(returned_on: nil).where(due_on: Date.current..) }
+  scope :overdue, -> { open.where(due_on: ...Date.current) }
+  scope :ongoing, -> { open.where(due_on: Date.current..) }
 
   validates :started_on, :due_on, presence: true
   validates :book_copy_id, uniqueness: {
-    conditions: -> { where(returned_on: nil) },
+    conditions: -> { open },
     message: :already_lent
   }, unless: :returned_on?
   validate :due_on_not_before_started_on
