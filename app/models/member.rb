@@ -11,6 +11,10 @@ class Member < ApplicationRecord
   validates :active, inclusion: { in: [ true, false ] }
   validate :no_open_loans_when_deactivating, if: -> { will_save_change_to_active?(to: false) }
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
   private
 
   def no_open_loans_when_deactivating
