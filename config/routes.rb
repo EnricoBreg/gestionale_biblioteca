@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  resources :books
+  resources :books do
+    resources :book_copies, shallow: true, except: %i[ index show new ]
+  end
   resource :session, only: %i[ new create destroy ]
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
