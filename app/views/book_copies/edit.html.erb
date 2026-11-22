@@ -1,0 +1,40 @@
+<div class="container narrow page">
+  <div>
+    <nav class="breadcrumb" aria-label="Percorso">
+      <%= link_to "Libri", books_path %>
+      <%= link_to @book_copy.book.title, book_path(@book_copy.book) %>
+      <span>Modifica copia</span>
+    </nav>
+    <h1>Modifica informazioni della copia</h1>
+  </div>
+
+  <%= form_with model: @book_copy, class: "card form-stack" do |form| %>
+
+    <% if @book_copy.errors.any? %>
+      <div class="alert error" role="alert">
+        <p>Impossibile salvare le informazioni della copia:</p>
+        <ul>
+          <% @book_copy.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <label>
+      <%= BookCopy.human_attribute_name(:inventory_code) %>
+      <%= form.text_field :inventory_code %>
+    </label>
+
+    <label>
+      <%= BookCopy.human_attribute_name(:location) %>
+      <%= form.text_field :location %>
+    </label>
+
+    <div class="form-actions">
+      <%= link_to "Annulla", book_url(@book_copy.book), class: "secondary", role: "button" %>
+      <%= form.submit "Salva copia" %>
+    </div>
+  <% end %>
+</div>
+

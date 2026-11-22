@@ -1,4 +1,18 @@
 <%= form_with model: book, class: "card form-stack" do |form| %>
+
+  <% if book.errors.any? %>
+    <div class="alert error" role="alert">
+      <p>Impossibile salvare il libro:</p>
+      <ul>
+        <% book.errors.full_messages.each do |message| %>
+          <li>
+            <%= message %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
   <label>
     <%= Book.human_attribute_name(:title) %>
     <%= form.text_field :title, placeholder: "Es. Il barone rampante"%>

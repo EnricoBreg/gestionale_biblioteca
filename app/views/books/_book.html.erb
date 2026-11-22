@@ -57,11 +57,18 @@
               <tr>
                 <td class="mono"><%= book_copy.inventory_code %></td>
                 <td><%= book_copy.location %></td>
-                <td><span class="badge info">Disponibile</span></td>
-                <td>Chiara Vitali - scade il 2/12/2026</td>
+                <% if book_copy.current_loan %>
+                  <td><span class="badge">In prestito</span></td>
+                  <td><%= book_copy.current_loan.member.full_name %> - scade il <%= l(book_copy.current_loan.due_on) %></td>
+                <% else %>
+                  <td><span class="badge info">Disponibile</span></td>
+                  <td>—</td>
+                <% end %>
                 <td class="cell-actions">
-                  <a href="#">Modifica</a>
-                  <a class="text-danger" href="#">Elimina</a>
+                  <%= link_to "Modifica", edit_book_copy_path(book_copy) %>
+                  <%= link_to "Elimina", book_copy, class: "text-danger", 
+                              data: { turbo_method: :delete, 
+                                      turbo_confirm: "Sei sicuro di voler eliminare la copia?" } %>
                 </td>
               </tr>
             <% end %>
@@ -74,17 +81,33 @@
   <section class="panel flex flex-col gap-4">
     <h3>Aggiungi una copia</h3>
 
-    <form class="filters">
-      <label class="grow-1">
-        <%= BookCopy.human_attribute_name(:inventory_code)  %>
-        <input type="text" name="book_copy[inventory_code]" placeholder="INV-0001-D">
-      </label>
-      <label class="grow-3">
-        <%= BookCopy.human_attribute_name(:location)  %>
-        <input type="text" name="book_copy[location]" placeholder="Sala A · Scaffale 1">
-      </label>
-      <button type="submit">Aggiungi copia</button>
-    </form>
+    <%= form_with model: [ book, @book_copy || BookCopy.new ], method: :post do |form| %>
+      <% if form.object.errors.any? %>
+        <div class="alert error mb-2" role="alert">
+          <p>Impossibile salvare la nuova copia:</p>
+          <ul>
+            <% form.object.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="filters">
+        <label class="grow-1">
+          <%= BookCopy.human_attribute_name(:inventory_code) %>
+          <%= form.text_field :inventory_code, placeholder: "INV-001-D" %>
+        </label>
+
+        <label class="grow-3">
+          <%= BookCopy.human_attribute_name(:location) %>
+          <%= form.text_field :location, placeholder: "Sala A · Scaffale 1" %>
+        </label>
+
+        <%= form.submit "Aggiungi copia" %>
+      </div>
+      
+    <% end %>
   </section>
 
 </div>
