@@ -9,3 +9,8 @@ two:
   inventory_code: "4PPRMHHB"
   location: "Scaffale 2"
   book: two
+
+no_lent:
+  inventory_code: "INV-0001"
+  location: "Scaffale 1 - Sala A"
+  book: two
