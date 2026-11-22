@@ -1,5 +1,5 @@
 class BooksController < ApplicationController
-  before_action :set_book, only: %i[ show edit update destroy ]
+  before_action :set_book, only: %i[ edit update destroy ]
 
   # GET /books
   def index
@@ -8,6 +8,7 @@ class BooksController < ApplicationController
 
   # GET /books/1
   def show
+    @book = Book.includes(book_copies: { current_loan: :member }).find(params.expect(:id))
   end
 
   # GET /books/new
