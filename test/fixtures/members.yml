@@ -11,7 +11,21 @@ one:
 two:
   first_name: "Sarah"
   last_name: "Smith"
-  tax_code: "PCLXNC26M45D095W"
+  tax_code: "SMTSRH26M45D095W"
   email: "s.smith@email.com"
   phone: "+39 3524849665"
   active: true
+
+no_loans:
+  first_name: "Giuseppe"
+  last_name: "Carlo"
+  tax_code: "CRLGSP26M45D095W"
+  email: "c.giuseppe@email.com"
+  phone: "+39 3524849665"
+  active: true
+
+inactive:
+  first_name: "Carla"
+  last_name: "Bianchi"
+  tax_code: "BNCCRL80A41F205X"
+  active: false
