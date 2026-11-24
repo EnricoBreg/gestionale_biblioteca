@@ -115,6 +115,32 @@ class MemberTest < ActiveSupport::TestCase
     assert @member.reload.active?
   end
 
+  test "il % è un carattere normale" do
+    assert_empty Member.search(q: "%")
+  end
+
+  test "basta un campo per trovare il lettore" do
+    sarah = members(:two) # Sarah Smith SMTSRH26M45D095W s.smith@email.com +39 3524849665
+    [ "sarah", "sarah smith", "smith sarah", "  smtsrh  ", "smith@email", "3524849665" ].each do |text|
+      assert_includes Member.search(q: text), sarah, "non trovata cercando #{text.inspect}"
+    end
+  end
+
+  test "concatenazione nome e cognome vale solo per lo stesso" do
+    # Sarah Smith SMTSRH26M45D095W s.smith@email.com +39 3524849665
+    [ "sarah doe", "doe sarah" ].each do |text|
+      assert_empty Member.search(q: text), "trovato cercando #{text.inspect}"
+    end
+  end
+
+  test "ricerca per q vuoto restituisce tutti" do
+    assert_equal Member.all.count, Member.search(q: "   ").count
+  end
+
+  test "ricerca per status non valido fallback su default" do
+    assert_equal Member.all.count, Member.search(status: "not_valid").count
+  end
+
   test "disattivazione bloccata con prestiti scaduti" do
     member = members(:one)
     member.loans.create!(book_copy: book_copies(:one),
@@ -124,5 +150,29 @@ class MemberTest < ActiveSupport::TestCase
     assert_not member.update(active: false)
     assert member.errors.added?(:base, :has_open_loans)
     assert member.reload.active?
+  end
+
+  test "filtro di ricerca per stato all trova tutti" do
+    assert_includes Member.search(status: "all"), members(:one)
+    assert_includes Member.search(status: "all"), members(:inactive)
+  end
+
+  test "ricerca con filtro di stato attivi" do
+    assert_includes Member.search(status: "active"), members(:one)
+    assert_not_includes Member.search(status: "active"), members(:inactive)
+  end
+
+  test "ricerca con filtro di stato non attivi" do
+    assert_includes Member.search(status: "inactive"), members(:inactive)
+    assert_not_includes Member.search(status: "inactive"), members(:one)
+  end
+
+  test "il filtro di stato vale anche sui risultati trovati per nome" do
+    assert_not_includes Member.search(q: "bianchi", status: "active"), members(:inactive)
+    assert_includes Member.search(q: "bianchi"), members(:inactive)
+  end
+
+  test "senza stato compaiono anche i disattivati" do
+    assert_includes Member.search({}), members(:inactive)
   end
 end
