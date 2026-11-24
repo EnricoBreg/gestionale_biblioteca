@@ -37,6 +37,13 @@
   --color-danger-hover: #8c1d18;
   --color-danger-soft: #fdecea;
 
+  --color-warning: #f5b301;        
+  --color-warning-hover: #e0a100;
+  --color-warning-strong: #b45309; 
+  --color-warning-text: #92400e;   
+  --color-on-warning: #3d2600;     
+  --color-warning-soft: #fff4d6;
+
   --color-neutral: #4d5360;
   --color-neutral-soft: #f0f1f4;
 
@@ -278,6 +285,28 @@ input[type="submit"]:hover,
   background: var(--color-danger-soft);
   border-color: var(--color-danger-hover);
   color: var(--color-danger-hover);
+}
+
+.warning {
+  background: var(--color-warning);
+  border-color: var(--color-warning);
+  color: var(--color-on-warning);
+}
+.warning:hover {
+  background: var(--color-warning-hover);
+  border-color: var(--color-warning-hover);
+  color: var(--color-on-warning);
+}
+
+.warning.outline {
+  background: var(--color-bg);
+  border-color: var(--color-warning-strong);
+  color: var(--color-warning-text);
+}
+.warning.outline:hover {
+  background: var(--color-warning-soft);
+  border-color: var(--color-warning-strong);
+  color: var(--color-warning-text);
 }
 
 /* Misura ridotta per le righe di tabella: class="small" */
@@ -573,6 +602,10 @@ td a:not([role="button"]) {
 .badge.late {
   background: var(--color-danger);
   color: #ffffff;
+}
+.badge.warning {
+  background: var(--color-warning-soft); 
+  color: var(--color-warning-text);
 }
 
 /* Messaggi flash e riepilogo errori
