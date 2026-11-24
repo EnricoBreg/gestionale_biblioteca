@@ -1,0 +1,58 @@
+<%= form_with model: member, class: "card form-stack" do |form| %>
+  
+  <% if member.errors.any? %>
+   <div class="alert error" role="alert">
+      <strong>Impossibile salvare</strong> Correggi i campi evidenziati e riprova.
+    </div>
+  <% end %>
+
+  <div class="form-row">
+    <label>
+      <%= Member.human_attribute_name(:first_name) %>
+      <%= form.text_field :first_name, placeholder: "Es. Mario", aria: { invalid: member.errors.include?(:first_name) } %>
+      <% if member.errors.include?(:first_name) %>
+        <small class="error"><%= member.errors.full_messages_for(:first_name).to_sentence %></small>
+      <% end %>
+    </label>
+    <label>
+      <%= Member.human_attribute_name(:last_name) %>
+      <%= form.text_field :last_name, placeholder: "Es. Rossi", aria: { invalid: member.errors.include?(:last_name) }  %>
+      <% if member.errors.include?(:last_name) %>
+        <small class="error"><%= member.errors.full_messages_for(:last_name).to_sentence %></small>
+      <% end %>
+    </label>
+  </div>
+
+  <label>
+    <%= Member.human_attribute_name(:tax_code) %>
+    <%= form.text_field :tax_code, placeholder: "Es. RSSMAR59H18A59T", class: "mono",
+                        aria: { invalid: member.errors.include?(:tax_code) } %>
+    <% if member.errors.include?(:tax_code) %>
+      <small class="error"><%= member.errors.full_messages_for(:tax_code).to_sentence %></small>
+    <% end %>
+  </label>
+
+  <div class="form-row">
+    <label>
+      <%= Member.human_attribute_name(:email) %>
+      <%= form.text_field :email, placeholder: "Es. mario.rossi@email.com", 
+                          aria: { invalid: member.errors.include?(:email) } %>
+      <% if member.errors.include?(:email) %>
+        <small class="error"><%= member.errors.full_messages_for(:email).to_sentence %></small>
+      <% end %>
+    </label>
+    <label>
+      <%= Member.human_attribute_name(:phone) %>
+      <%= form.text_field :phone, placeholder: "Es. 333 8087884", 
+                          aria: { invalid: member.errors.include?(:phone) } %>
+      <% if member.errors.include?(:phone) %>
+        <small class="error"><%= member.errors.full_messages_for(:phone).to_sentence %></small>
+      <% end %>
+    </label>
+  </div>
+
+  <div class="form-actions">
+    <%= link_to "Annulla", member, role: "button", class: "secondary" %>
+    <%= form.submit "Salva", type: :submit %>
+  </div>
+<% end %>

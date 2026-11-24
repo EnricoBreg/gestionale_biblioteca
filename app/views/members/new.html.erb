@@ -1,0 +1,13 @@
+<% content_for :title, "Nuovo lettore" %>
+
+<div class="container narrow page">
+  <div>
+    <nav class="breadcrumb" aria-label="Percorso">
+      <%= link_to "Lettori", members_url %>
+      <span>Nuovo lettore</span>
+    </nav>
+    <h1>Nuovo lettore</h1>
+  </div>
+
+  <%= render "form", member: @member %>
+</div>

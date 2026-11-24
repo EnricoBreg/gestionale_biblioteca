@@ -1,0 +1,93 @@
+<div id="<%= dom_id member %>" class="container page gap-6">
+
+  <div class="page-header items-end">
+    <div>
+      <nav class="breadcrumb" aria-label="Percorso">
+        <%= link_to "Lettori", members_url %>
+        <span><%= member.full_name %></span>
+      </nav>
+      <h1><%= member.full_name %></h1>
+      <p class="subtitle text-lg">Iscritto dal <%= l(member.created_at, format: :long) %></p>
+    </div>
+
+    <div class="flex flex-wrap gap-3">
+      <%= button_to "Elimina", member, class: "danger", method: :delete, 
+                    data: { turbo_confirm: "Sei sicuro di voler cancellare questo lettore?" } %>
+      <% if member.active? %>
+        <%= button_to "Disattiva", deactivate_member_path(member), method: :patch, 
+                      form: { data: { turbo_confirm: "Disattivare il lettore?" } },
+                      class: "warning outline" %>
+      <% else %>
+        <%= button_to "Riattiva", activate_member_path(member), method: :patch, class: "outline" %>
+      <% end %>
+      <%= link_to "Modifica", edit_member_path(member), role: "button", class: "outline" %>
+    </div>
+  </div>
+
+  <dl class="details card">
+    <div>
+      <dt><%= Member.human_attribute_name(:email) %></dt>
+      <dd class="mono"><%= member.email || "—" %></dd>
+    </div>
+    <div>
+      <dt><%= Member.human_attribute_name(:phone) %></dt>
+      <dd><%= member.phone || "—" %></dd>
+    </div>
+    <div>
+      <dt>Prestiti richiesti</dt>
+      <dd><%= member.loans.count %></dd>
+    </div>
+    <div>
+      <dt>Stato</dt>
+      <dd>
+        <% if member.active? %>
+          <span class="badge info">Attivo</span>
+        <% else %>
+          <span class="badge warning">Non attivo</span>
+        <% end %>
+      </dd>
+    </div>
+  </dl>
+
+  <section class="flex flex-col gap-3">
+    <h2>Situazione prestiti in corso</h2>
+
+    <% if member.open_loans.empty? %>
+      <p>Nessun prestito in corso o in scadenza per questo lettore.</p>
+    <% else %>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Libro</th>
+            <th scope="col">Copia</th>
+            <th scope="col">Inizio</th>
+            <th scope="col">Scadenza</th>
+            <th scope="col">Stato</th>
+            <th scope="col"><span class="sr-only">Azioni</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% member.open_loans.each do |loan| %>
+            <tr>
+              <td><%= loan.book_copy.book.title %></td>
+              <td class="mono"><%= loan.book_copy.inventory_code %></td>
+              <td><%= l(loan.started_on) %></td>
+              <td><%= l(loan.due_on) %></td>
+              <% if loan.overdue? %>
+                <td><span class="badge late">Scaduto</span></td>
+              <% else %>
+                <td><span class="badge info">In corso</span></td>
+              <% end %>
+              <td class="cell-actions">
+                <%= button_to "Restituisci", loan, class: "outline", method: :patch,
+                      params: { loan: { returned_on: Date.current } },
+                      form: { data: { turbo_confirm: "Registrare il rientro per #{loan.book_copy.book.title}?" } } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </section>
+
+</div>

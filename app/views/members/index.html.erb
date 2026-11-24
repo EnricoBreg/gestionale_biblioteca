@@ -1,0 +1,60 @@
+<% content_for :title, "Lettori" %>
+
+<div class="page-header">
+  <h1>Lettori</h1>
+  <%= link_to "Nuovo lettore", new_member_path, role: :button %>
+</div>
+
+<%= form_with url: members_path, method: :get, class: "filters", role: "search" do |form| %>
+  <label class="grow-3">
+    Cerca
+    <%= form.search_field :q, value: params[:q], placeholder: "Nominativo, codice fiscale, email o telefono" %>
+  </label>
+  <label class="grow-1">
+    <%= form.select :status, [
+      ["Tutti", "all"], ["Attivi", "active"], ["Non attivi", "inactive"],
+    ], selected: params[:status] %>
+  </label>
+
+  <div class="flex gap-2">
+    <%= form.button "Filtra", class: "outline", type: :submit %>
+    <%= link_to "Azzera", members_path, class: "secondary", role: :button %>
+  </div>
+<% end %>
+
+<div id="members" class="table-wrap">
+  <% if @members.empty? %>
+    <p>Nessun lettore trovato.</p>
+  <% else %>
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">Cognome e nome</th>
+          <th scope="col">Codice fiscale</th>
+          <th scope="col">Email</th>
+          <th scope="col">Telefono</th>
+          <th scope="col">Prestiti in corso</th>
+          <th scope="col">Stato</th>
+          <th scope="col"><span class="sr-only">Azioni</span></th>
+        </tr> 
+      </thead>
+      <tbody>
+        <% @members.each do |member| %>
+          <tr>
+            <td class="cell-main nowrap"><%= member.full_name %></td>
+            <td class="mono"><%= member.tax_code %></td>
+            <td><%= member.email %></td>
+            <td class="nowrap"><%= member.phone %></td>
+            <td><%= member.loans_count %></td>
+            <% if member.active? %>
+              <td><span class="badge info">Attivo</span></td>
+            <% else %>
+              <td><span class="badge">Non attivo</span></td>
+            <% end %>
+            <td class="cell-actions"><%= link_to "Vedi", member_path(member) %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
