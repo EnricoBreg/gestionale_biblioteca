@@ -3,6 +3,13 @@ Rails.application.routes.draw do
     resources :book_copies, shallow: true, except: %i[ index show new ]
   end
   resource :session, only: %i[ new create destroy ]
+  resources :members do
+    member {
+      patch :activate
+      patch :deactivate
+    }
+  end
+  resources :loans
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
